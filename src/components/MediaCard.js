@@ -1,170 +1,152 @@
-import React, { useState } from 'react';
-import { Star, Clock, Play, Heart, Calendar, Zap } from 'lucide-react';
-import { useWatchlist } from '../context/WatchlistContext';
+import React from 'react';
+import { Star, Clock, Check, Plus } from 'lucide-react';
 import { IMG_BASE_URL } from '../utils/constants';
 
-const MediaCard = ({ media, onClick }) => {
-  const [imageError, setImageError] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const { addToWatchlist, removeFromWatchlist, isInWatchlist } = useWatchlist();
-  
-  const inWatchlist = isInWatchlist(media.id);
-  const title = media.title || media.name;
-  const releaseDate = media.release_date || media.first_air_date;
-  const mediaType = media.media_type || (media.title ? 'movie' : 'tv');
-  const rating = media.vote_average ? Math.round(media.vote_average * 10) / 10 : null;
+const MediaCard = ({ 
+  item, 
+  viewMode, 
+  darkMode, 
+  isInWatchlist, 
+  isWatched, 
+  onSelect, 
+  onToggleWatchlist, 
+  onToggleWatched 
+}) => {
+  const title = item.title || item.name;
+  const date = item.release_date || item.first_air_date;
+  const year = date ? new Date(date).getFullYear() : 'N/A';
+  const rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
 
-  const handleWatchlistClick = (e) => {
+  const handleActionClick = (e, action) => {
     e.stopPropagation();
-    if (inWatchlist) {
-      removeFromWatchlist(media.id);
-    } else {
-      addToWatchlist({ ...media, media_type: mediaType });
-    }
+    action();
   };
 
-  const handleImageLoad = () => {
-    setImageLoaded(true);
-  };
-
-  const handleImageError = () => {
-    setImageError(true);
-    setImageLoaded(true);
-  };
-
-  const posterUrl = media.poster_path 
-    ? `${IMG_BASE_URL}${media.poster_path}`
-    : null;
-
-  const formatYear = (dateString) => {
-    if (!dateString) return '';
-    return new Date(dateString).getFullYear();
-  };
-
-  const getRatingColor = (rating) => {
-    if (rating >= 8) return 'text-green-400';
-    if (rating >= 6) return 'text-yellow-400';
-    return 'text-red-400';
-  };
-
-  return (
-    <div 
-      className="media-card animate-fadeIn group"
-      onClick={() => onClick && onClick(media)}
-    >
-      {/* Image Container */}
-      <div className="media-card-image">
-        {!imageLoaded && (
-          <div className="skeleton w-full h-full flex items-center justify-center">
-            <Zap className="text-gray-600" size={24} />
-          </div>
-        )}
-        
-        {posterUrl && !imageError ? (
-          <img
-            src={posterUrl}
-            alt={title}
-            className={`transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-            onLoad={handleImageLoad}
-            onError={handleImageError}
-            loading="lazy"
-          />
-        ) : imageLoaded && (
-          <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
-            <div className="text-center p-4">
-              <Zap className="text-gray-500 mx-auto mb-2" size={32} />
-              <p className="text-gray-400 text-sm font-medium">{title}</p>
-            </div>
-          </div>
-        )}
-
-        {/* Media Type Badge */}
-        <div className="absolute top-3 left-3 px-2 py-1 bg-black/70 backdrop-blur-sm rounded-md">
-          <span className="text-xs font-semibold text-white uppercase tracking-wide">
-            {mediaType === 'tv' ? 'TV' : 'Movie'}
-          </span>
-        </div>
-
-        {/* Rating Badge */}
-        {rating && (
-          <div className="absolute top-3 right-3 flex items-center space-x-1 px-2 py-1 bg-black/70 backdrop-blur-sm rounded-md">
-            <Star className="text-yellow-400" size={12} fill="currentColor" />
-            <span className={`text-xs font-bold ${getRatingColor(rating)}`}>
+  if (viewMode === 'list') {
+    return (
+      <div 
+        onClick={onSelect}
+        className={`flex items-center p-4 rounded-lg cursor-pointer transition-all duration-200 hover:scale-[1.02] ${
+          darkMode 
+            ? 'bg-gray-800 hover:bg-gray-700' 
+            : 'bg-white hover:bg-gray-50'
+        } shadow-md hover:shadow-lg`}
+      >
+        <img
+          src={item.poster_path ? `${IMG_BASE_URL}${item.poster_path}` : '/placeholder.jpg'}
+          alt={title}
+          className="w-16 h-24 object-cover rounded-md shadow-sm"
+          loading="lazy"
+        />
+        <div className="flex-1 ml-4">
+          <h3 className={`font-semibold text-lg ${
+            darkMode ? 'text-white' : 'text-gray-900'
+          }`}>
+            {title}
+          </h3>
+          <p className={`text-sm ${
+            darkMode ? 'text-gray-400' : 'text-gray-600'
+          }`}>
+            {year} • {item.media_type?.toUpperCase() || 'MOVIE'}
+          </p>
+          <div className="flex items-center mt-2">
+            <Star size={16} className="text-yellow-500 mr-1" />
+            <span className={`text-sm ${
+              darkMode ? 'text-gray-300' : 'text-gray-700'
+            }`}>
               {rating}
             </span>
           </div>
-        )}
+        </div>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={(e) => handleActionClick(e, onToggleWatchlist)}
+            className={`p-2 rounded-full transition-colors duration-200 ${
+              isInWatchlist
+                ? 'bg-blue-500 text-white hover:bg-blue-600'
+                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+            }`}
+          >
+            {isInWatchlist ? <Check size={16} /> : <Plus size={16} />}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-        {/* Hover Overlay */}
-        <div className="media-card-overlay">
-          <div className="media-card-content">
-            {/* Title */}
-            <h3 className="text-white font-bold text-sm mb-2 line-clamp-2">
-              {title}
-            </h3>
-
-            {/* Release Year */}
-            {releaseDate && (
-              <div className="flex items-center text-gray-300 text-xs mb-3">
-                <Calendar size={12} className="mr-1" />
-                <span>{formatYear(releaseDate)}</span>
-              </div>
-            )}
-
-            {/* Action Buttons */}
-            <div className="flex items-center space-x-2">
-              {/* Watchlist Button */}
-              <button
-                onClick={handleWatchlistClick}
-                className={`p-2 rounded-full backdrop-blur-sm transition-all duration-200 transform hover:scale-110 ${
-                  inWatchlist 
-                    ? 'bg-red-500/80 text-white hover:bg-red-600/80' 
-                    : 'bg-white/20 text-white hover:bg-white/30'
-                }`}
-                aria-label={inWatchlist ? 'Remove from watchlist' : 'Add to watchlist'}
-              >
-                <Heart 
-                  size={16} 
-                  className={inWatchlist ? 'fill-current' : ''} 
-                />
-              </button>
-
-              {/* Quick Play Button */}
-              <button
-                className="p-2 rounded-full bg-blue-500/80 text-white backdrop-blur-sm hover:bg-blue-600/80 transition-all duration-200 transform hover:scale-110"
-                aria-label="Quick preview"
-              >
-                <Play size={16} fill="currentColor" />
-              </button>
-
-              {/* Watch Later Button */}
-              <button
-                className="p-2 rounded-full bg-white/20 text-white backdrop-blur-sm hover:bg-white/30 transition-all duration-200 transform hover:scale-110"
-                aria-label="Watch later"
-              >
-                <Clock size={16} />
-              </button>
+  return (
+    <div 
+      onClick={onSelect}
+      className="group relative cursor-pointer transform transition-all duration-300 hover:scale-105 hover:z-10"
+    >
+      {/* Image container with aspect ratio */}
+      <div className="aspect-[2/3] overflow-hidden rounded-lg shadow-lg">
+        <img
+          src={item.poster_path ? `${IMG_BASE_URL}${item.poster_path}` : '/placeholder.jpg'}
+          alt={title}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          loading="lazy"
+        />
+      </div>
+      
+      {/* Overlay with gradient and content */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent 
+                      opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-lg">
+        <div className="absolute bottom-0 left-0 right-0 p-4">
+          {/* Content appears on hover */}
+          <h3 className="font-semibold text-white transform translate-y-2 
+                         group-hover:translate-y-0 transition-transform duration-300 mb-2">
+            {title}
+          </h3>
+          
+          {/* Meta Info */}
+          <div className="flex items-center justify-between text-sm text-gray-300 mb-3 
+                          opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
+            <span>{year}</span>
+            <div className="flex items-center">
+              <Star size={14} className="text-yellow-500 mr-1" />
+              <span>{rating}</span>
             </div>
+          </div>
+          
+          {/* Action buttons with glass morphism */}
+          <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 
+                          transition-opacity duration-300 delay-100">
+            <button
+              onClick={(e) => handleActionClick(e, onToggleWatchlist)}
+              className={`p-2 rounded-full backdrop-blur-sm transition-all duration-200 transform hover:scale-110 ${
+                isInWatchlist
+                  ? 'bg-blue-500/80 text-white hover:bg-blue-500'
+                  : 'bg-white/20 text-white hover:bg-white/30'
+              }`}
+            >
+              {isInWatchlist ? <Check size={16} /> : <Plus size={16} />}
+            </button>
+            <button
+              onClick={(e) => handleActionClick(e, onToggleWatched)}
+              className={`p-2 rounded-full backdrop-blur-sm transition-all duration-200 transform hover:scale-110 ${
+                isWatched
+                  ? 'bg-green-500/80 text-white hover:bg-green-500'
+                  : 'bg-white/20 text-white hover:bg-white/30'
+              }`}
+            >
+              <Clock size={16} />
+            </button>
           </div>
         </div>
       </div>
-
-      {/* Card Footer (Always Visible) */}
-      <div className="p-3">
-        <h4 className="font-semibold text-sm text-white truncate mb-1">
-          {title}
-        </h4>
-        
-        <div className="flex items-center justify-between text-xs text-gray-400">
-          <span>{formatYear(releaseDate)}</span>
-          {rating && (
-            <div className="flex items-center space-x-1">
-              <Star className="text-yellow-400" size={10} fill="currentColor" />
-              <span className={getRatingColor(rating)}>{rating}</span>
-            </div>
+      
+      {/* Status Indicators */}
+      {(isInWatchlist || isWatched) && (
+        <div className="absolute top-2 right-2 flex space-x-1">
+          {isInWatchlist && (
+            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+          )}
+          {isWatched && (
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 };
