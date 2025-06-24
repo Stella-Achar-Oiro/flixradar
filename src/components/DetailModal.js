@@ -15,7 +15,7 @@ const DetailModal = ({
   const date = item.release_date || item.first_air_date;
   const year = date ? new Date(date).getFullYear() : 'N/A';
   const rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
-  const runtime = item.runtime || item.episode_run_time?.[0] || 'N/A';
+  const runtime = item.runtime || item.episode_run_time?.[0] || null;
 
   // Close modal on Escape key
   useEffect(() => {
@@ -136,7 +136,7 @@ const DetailModal = ({
                   <div className="text-sm text-gray-400">Runtime</div>
                   <div className="flex items-center mt-1">
                     <Clock size={16} className="text-blue-500 mr-1" />
-                    <span className="font-semibold text-white">{runtime} min</span>
+                    <span className="font-semibold text-white">{runtime ? `${runtime} min` : 'Unknown'}</span>
                   </div>
                 </div>
                 
