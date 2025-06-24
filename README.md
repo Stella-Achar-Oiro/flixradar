@@ -2,6 +2,10 @@
 
 A modern, responsive movie and TV show discovery application built with React.
 
+## 🚀 Live Demo
+
+**[Try FlixRadar Live](https://Stella-Achar-Oiro.github.io/flixradar)**
+
 ## Features
 
 🎬 **Movie & TV Discovery**
