@@ -9,12 +9,12 @@ A modern, responsive movie and TV show discovery application built with React.
 - Browse trending and popular content
 - View detailed information including ratings, cast, and synopsis
 
-❤️ **Personal Watchlist**
+ **Personal Watchlist**
 - Add movies and TV shows to your personal watchlist
 - Export watchlist data in JSON or CSV format
 - Persistent storage using localStorage
 
-🎨 **Theme System**
+ **Theme System**
 - Dark and light theme support
 - System preference detection
 - Customizable appearance settings
