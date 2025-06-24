@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { WatchlistProvider } from './context/WatchlistContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Header from './components/Header';
-import SearchBar from './components/SearchBar';
 import SearchResults from './components/SearchResults';
 import Watchlist from './pages/Watchlist';
 import useSearch from './hooks/useSearch';
@@ -12,9 +11,11 @@ import './styles/responsive.css';
 
 function App() {
   const { results, isLoading, error, search } = useSearch();
-  const [currentPage, setCurrentPage] = React.useState('home');
+  const [currentPage, setCurrentPage] = useState('home');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (query) => {
+    setSearchQuery(query);
     search(query);
     if (currentPage !== 'home') {
       setCurrentPage('home');
@@ -28,14 +29,12 @@ function App() {
       case 'home':
       default:
         return (
-          <main className="main-content">
-            <div className="search-section">
-              <SearchBar onSearch={handleSearch} />
-            </div>
+          <main className="main-content animate-fadeIn">
             <SearchResults 
               results={results} 
               isLoading={isLoading} 
               error={error}
+              searchQuery={searchQuery}
             />
           </main>
         );
@@ -45,14 +44,13 @@ function App() {
   return (
     <ThemeProvider>
       <WatchlistProvider>
-        <div className="App">
+        <div className="App min-h-screen">
           <Header 
             currentPage={currentPage}
             onNavigate={setCurrentPage}
+            onSearch={handleSearch}
           />
-          <div className="container">
-            {renderContent()}
-          </div>
+          {renderContent()}
         </div>
       </WatchlistProvider>
     </ThemeProvider>
