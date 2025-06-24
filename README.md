@@ -1,2 +1,2 @@
 # flixradar
-A movie/TV discovery app inspired
+A movie/TV discovery app
