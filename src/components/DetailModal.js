@@ -2,7 +2,15 @@ import React, { useEffect } from 'react';
 import { X, Star, Clock, Check, Plus, Calendar, Film } from 'lucide-react';
 import { IMG_BASE_URL } from '../utils/constants';
 
-function DetailModal({ item, darkMode, isInWatchlist, isWatched, onClose, onToggleWatchlist, onToggleWatched }) {
+const DetailModal = ({ 
+  item, 
+  darkMode, 
+  isInWatchlist, 
+  isWatched, 
+  onClose, 
+  onToggleWatchlist, 
+  onToggleWatched 
+}) => {
   const title = item.title || item.name;
   const date = item.release_date || item.first_air_date;
   const year = date ? new Date(date).getFullYear() : 'N/A';
@@ -44,9 +52,8 @@ function DetailModal({ item, darkMode, isInWatchlist, isWatched, onClose, onTogg
                    bg-gray-800 shadow-2xl animate-slideUp"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Hero Section */}
+        {/* Hero image with gradient overlay */}
         <div className="relative">
-          {/* Backdrop Image */}
           {item.backdrop_path && (
             <img
               src={`${IMG_BASE_URL}${item.backdrop_path}`}
@@ -56,20 +63,20 @@ function DetailModal({ item, darkMode, isInWatchlist, isWatched, onClose, onTogg
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-gray-800 via-gray-800/50 to-transparent" />
           
-          {/* Close Button */}
+          {/* Close button with hover effect */}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 p-2 rounded-full bg-black/50 text-white 
-                       hover:bg-black/70 backdrop-blur-sm transition-colors duration-200"
+                       hover:bg-black/70 backdrop-blur-sm transition-colors"
           >
             <X size={24} />
           </button>
         </div>
         
-        {/* Content */}
+        {/* Content with negative margin to overlap hero */}
         <div className="p-6 -mt-32 relative">
           <div className="flex flex-col md:flex-row gap-6">
-            {/* Poster */}
+            {/* Poster with shadow */}
             <div className="flex-shrink-0">
               <img
                 src={item.poster_path ? `${IMG_BASE_URL}${item.poster_path}` : '/placeholder.jpg'}
@@ -78,13 +85,13 @@ function DetailModal({ item, darkMode, isInWatchlist, isWatched, onClose, onTogg
               />
             </div>
             
-            {/* Details */}
+            {/* Details with styled elements */}
             <div className="flex-1">
               {/* Title and Year */}
               <h1 className="text-3xl font-bold text-white mb-2">{title}</h1>
               <p className="text-gray-400 text-lg mb-4">{year}</p>
               
-              {/* Action Buttons */}
+              {/* Action buttons with different states */}
               <div className="flex items-center space-x-3 mb-6">
                 <button
                   onClick={onToggleWatchlist}
@@ -113,11 +120,11 @@ function DetailModal({ item, darkMode, isInWatchlist, isWatched, onClose, onTogg
                 </button>
               </div>
               
-              {/* Rating Cards */}
+              {/* Rating cards with subtle animations */}
               <div className="grid grid-cols-3 gap-4 mb-6">
                 <div className="p-3 rounded-lg bg-gray-700/50 backdrop-blur 
                                hover:bg-gray-700 transition-colors cursor-pointer">
-                  <div className="text-sm text-gray-400">TMDB Rating</div>
+                  <div className="text-sm text-gray-400">TMDB</div>
                   <div className="flex items-center mt-1">
                     <Star size={16} className="text-yellow-500 mr-1" />
                     <span className="font-semibold text-white">{rating}</span>
@@ -182,6 +189,6 @@ function DetailModal({ item, darkMode, isInWatchlist, isWatched, onClose, onTogg
       </div>
     </div>
   );
-}
+};
 
 export default DetailModal;
