@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, TrendingUp, Grid, List, Moon, Sun, X } from 'lucide-react';
 
 const Header = ({ 
@@ -12,6 +12,22 @@ const Header = ({
   onSectionChange
 }) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  
+  const placeholders = [
+    "Search for your next favorite movie...",
+    "Discover trending shows and films...",
+    "Find top-rated movies and series...",
+    "Explore the latest blockbusters...",
+    "Search for hidden gems..."
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 bg-gray-800/95 backdrop-blur-md shadow-lg">
@@ -94,11 +110,11 @@ const Header = ({
               onChange={(e) => onSearchChange(e.target.value)}
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
-              placeholder="Search for your next favorite movie..."
+              placeholder={placeholders[placeholderIndex]}
               className={`pl-10 pr-4 py-3 rounded-full bg-gray-700/60 backdrop-blur-md text-white 
                          placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 
                          focus:bg-gray-700/80 transition-all duration-300 shadow-lg border border-gray-600/30 ${
-                isSearchFocused ? 'w-96 shadow-2xl ring-blue-400/50' : 'w-72'
+                isSearchFocused ? 'w-[28rem] shadow-2xl ring-blue-400/50' : 'w-80'
               }`}
             />
           </div>
