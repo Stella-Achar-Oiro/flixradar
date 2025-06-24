@@ -65,8 +65,11 @@ async function fetchWithCache(url) {
   }
 }
 
-// Export individual search functions for convenience
+// Export individual functions for convenience
 export const searchMovies = tmdbApi.searchMovies;
 export const searchTVShows = tmdbApi.searchTVShows;
+export const getTrending = tmdbApi.getTrending;
+export const getMovieDetails = (id) => tmdbApi.getDetails('movie', id);
+export const getTVDetails = (id) => tmdbApi.getDetails('tv', id);
 
 export { TMDB_API_KEY, OMDB_API_KEY, TMDB_BASE_URL, OMDB_BASE_URL, IMG_BASE_URL };
