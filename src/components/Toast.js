@@ -1,47 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { Check, X, AlertCircle, Info } from 'lucide-react';
 
-const Toast = ({ message, type = 'info', duration = 3000, onClose }) => {
-  const [isVisible, setIsVisible] = useState(true);
-
+const Toast = ({ message, type = 'success', onClose, duration = 3000 }) => {
   useEffect(() => {
-    if (duration > 0) {
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-        setTimeout(() => onClose && onClose(), 300); // Allow fade out animation
-      }, duration);
+    const timer = setTimeout(() => {
+      onClose();
+    }, duration);
 
-      return () => clearTimeout(timer);
+    return () => clearTimeout(timer);
+  }, [onClose, duration]);
+
+  const getIcon = () => {
+    switch (type) {
+      case 'success':
+        return <Check size={20} />;
+      case 'error':
+        return <X size={20} />;
+      case 'warning':
+        return <AlertCircle size={20} />;
+      case 'info':
+        return <Info size={20} />;
+      default:
+        return <Check size={20} />;
     }
-  }, [duration, onClose]);
-
-  const handleClose = () => {
-    setIsVisible(false);
-    setTimeout(() => onClose && onClose(), 300);
   };
 
-  const getToastClass = () => {
-    const baseClass = 'toast';
-    const typeClass = `toast-${type}`;
-    const visibilityClass = isVisible ? 'toast-visible' : 'toast-hidden';
-    return `${baseClass} ${typeClass} ${visibilityClass}`;
+  const getColors = () => {
+    switch (type) {
+      case 'success':
+        return 'bg-green-500 text-white';
+      case 'error':
+        return 'bg-red-500 text-white';
+      case 'warning':
+        return 'bg-yellow-500 text-white';
+      case 'info':
+        return 'bg-blue-500 text-white';
+      default:
+        return 'bg-green-500 text-white';
+    }
   };
 
   return (
-    <div className={getToastClass()}>
-      <div className="toast-content">
-        <span className="toast-icon">
-          {type === 'success' && '✅'}
-          {type === 'error' && '❌'}
-          {type === 'warning' && '⚠️'}
-          {type === 'info' && 'ℹ️'}
-        </span>
-        <span className="toast-message">{message}</span>
-        <button 
-          className="toast-close"
-          onClick={handleClose}
-          aria-label="Close notification"
+    <div className="fixed bottom-4 right-4 z-50 animate-slideUp">
+      <div className={`${getColors()} px-4 py-3 rounded-lg shadow-lg flex items-center space-x-3 min-w-[300px]`}>
+        {getIcon()}
+        <span className="flex-1">{message}</span>
+        <button
+          onClick={onClose}
+          className="hover:bg-white/20 rounded p-1 transition-colors"
         >
-          ✕
+          <X size={16} />
         </button>
       </div>
     </div>
