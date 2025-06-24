@@ -9,6 +9,18 @@ export const tmdbApi = {
     return fetchWithCache(url);
   },
   
+  searchMovies: async (query) => {
+    const url = `${TMDB_BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`;
+    const response = await fetchWithCache(url);
+    return response.results || [];
+  },
+  
+  searchTVShows: async (query) => {
+    const url = `${TMDB_BASE_URL}/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`;
+    const response = await fetchWithCache(url);
+    return response.results || [];
+  },
+  
   getTrending: async (mediaType = 'all', timeWindow = 'week') => {
     const url = `${TMDB_BASE_URL}/trending/${mediaType}/${timeWindow}?api_key=${TMDB_API_KEY}`;
     return fetchWithCache(url);
@@ -52,5 +64,9 @@ async function fetchWithCache(url) {
     throw error;
   }
 }
+
+// Export individual search functions for convenience
+export const searchMovies = tmdbApi.searchMovies;
+export const searchTVShows = tmdbApi.searchTVShows;
 
 export { TMDB_API_KEY, OMDB_API_KEY, TMDB_BASE_URL, OMDB_BASE_URL, IMG_BASE_URL };
