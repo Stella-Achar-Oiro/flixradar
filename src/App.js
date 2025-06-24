@@ -22,6 +22,7 @@ const FlixRadar = () => {
   const [watchlist, setWatchlist] = useLocalStorage('watchlist', []);
   const [watched, setWatched] = useLocalStorage('watched', []);
   const [toast, setToast] = useState(null);
+  const [activeSection, setActiveSection] = useState('trending');
   
   // Filter states
   const [selectedGenres, setSelectedGenres] = useState([]);
