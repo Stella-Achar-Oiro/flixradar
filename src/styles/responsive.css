@@ -1,0 +1,310 @@
+/* Mobile-First Responsive Design */
+
+/* Base styles for mobile devices (default) */
+.container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 var(--spacing-md);
+  margin: 0 auto;
+}
+
+/* Grid layouts */
+.grid {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.media-grid {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--spacing-sm);
+}
+
+.search-results {
+  padding: var(--spacing-md);
+}
+
+/* Header responsive styles */
+.header {
+  padding: var(--spacing-sm) var(--spacing-md);
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.header-nav {
+  flex-direction: column;
+  width: 100%;
+  gap: var(--spacing-xs);
+}
+
+.search-bar {
+  width: 100%;
+  max-width: none;
+}
+
+/* Media card responsive styles */
+.media-card {
+  min-width: 150px;
+  max-width: 200px;
+}
+
+.media-card-poster {
+  aspect-ratio: 2/3;
+  width: 100%;
+}
+
+/* Modal responsive styles */
+.modal-content {
+  width: 95vw;
+  height: 95vh;
+  max-width: none;
+  max-height: none;
+  margin: 2.5vh auto;
+  border-radius: var(--border-radius-lg);
+}
+
+.modal-body {
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.modal-poster {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* Filter responsive styles */
+.filters {
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.filters-group {
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+/* Watchlist responsive styles */
+.watchlist-header {
+  flex-direction: column;
+  gap: var(--spacing-md);
+  align-items: stretch;
+}
+
+.watchlist-controls {
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.export-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+/* Toast responsive styles */
+.toast {
+  left: var(--spacing-sm);
+  right: var(--spacing-sm);
+  width: auto;
+  max-width: none;
+}
+
+/* Tablet Styles */
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+    padding: 0 var(--spacing-lg);
+  }
+
+  .media-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .header-nav {
+    flex-direction: row;
+    width: auto;
+    gap: var(--spacing-md);
+  }
+
+  .search-bar {
+    width: 300px;
+    max-width: 300px;
+  }
+
+  .modal-content {
+    width: 90vw;
+    height: 90vh;
+  }
+
+  .filters {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .filters-group {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .watchlist-controls {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* Desktop Small */
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+
+  .media-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  .modal-content {
+    width: 80vw;
+    height: 85vh;
+    max-width: 900px;
+    max-height: 700px;
+  }
+
+  .modal-body {
+    flex-direction: row;
+    gap: var(--spacing-xl);
+  }
+
+  .modal-poster {
+    width: 300px;
+    max-width: 300px;
+    margin: 0;
+  }
+
+  .watchlist-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* Desktop Medium */
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+
+  .media-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .search-bar {
+    width: 400px;
+    max-width: 400px;
+  }
+}
+
+/* Desktop Large */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+
+  .media-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+
+  .search-bar {
+    width: 500px;
+    max-width: 500px;
+  }
+}
+
+/* Desktop Extra Large */
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+
+  .media-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+}
+
+/* Utility classes for responsive behavior */
+.hidden-mobile {
+  display: none;
+}
+
+.visible-mobile {
+  display: block;
+}
+
+@media (min-width: 576px) {
+  .hidden-mobile {
+    display: block;
+  }
+  
+  .visible-mobile {
+    display: none;
+  }
+  
+  .hidden-tablet {
+    display: none;
+  }
+  
+  .visible-tablet {
+    display: block;
+  }
+}
+
+@media (min-width: 768px) {
+  .hidden-tablet {
+    display: block;
+  }
+  
+  .visible-tablet {
+    display: none;
+  }
+  
+  .hidden-desktop {
+    display: none;
+  }
+  
+  .visible-desktop {
+    display: block;
+  }
+}
+
+@media (min-width: 992px) {
+  .hidden-desktop {
+    display: block;
+  }
+  
+  .visible-desktop {
+    display: none;
+  }
+}
+
+/* Touch-friendly interactions */
+@media (pointer: coarse) {
+  .media-card,
+  .button,
+  .watchlist-button {
+    min-height: 44px; /* Apple's recommended minimum touch target */
+  }
+  
+  .modal-close {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
