@@ -41,7 +41,20 @@ const FlixRadar = () => {
         if (debouncedSearchQuery.trim()) {
           url = `${TMDB_BASE_URL}/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(debouncedSearchQuery)}`;
         } else {
-          url = `${TMDB_BASE_URL}/trending/all/week?api_key=${TMDB_API_KEY}`;
+          switch (activeSection) {
+            case 'trending':
+              url = `${TMDB_BASE_URL}/trending/all/week?api_key=${TMDB_API_KEY}`;
+              break;
+            case 'top-rated':
+              url = `${TMDB_BASE_URL}/movie/top_rated?api_key=${TMDB_API_KEY}`;
+              break;
+            case 'watchlist':
+              setMovies(movies.filter(movie => watchlist.includes(movie.id)));
+              setLoading(false);
+              return;
+            default:
+              url = `${TMDB_BASE_URL}/trending/all/week?api_key=${TMDB_API_KEY}`;
+          }
         }
         
         const response = await fetch(url);
@@ -57,7 +70,7 @@ const FlixRadar = () => {
     };
     
     fetchMovies();
-  }, [debouncedSearchQuery]);
+  }, [debouncedSearchQuery, activeSection]);
 
   // Filter movies
   const filteredMovies = movies.filter(movie => {
@@ -162,6 +175,8 @@ const FlixRadar = () => {
         onViewModeChange={setViewMode}
         darkMode={darkMode}
         onDarkModeToggle={() => setDarkMode(!darkMode)}
+        activeSection={activeSection}
+        onSectionChange={setActiveSection}
       />
       
       {/* Main Content */}
